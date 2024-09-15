@@ -169,10 +169,10 @@ export default function Component() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
+              <h1 className="text-4xl md:text-5xl lg:pl-6 font-bold mb-6 text-gray-800">
                 AI-Powered <span className="text-blue-600">Healthcare</span> Revolution
               </h1>
-              <div className="text-lg md:text-xl mb-10 text-gray-600 h-20">
+              <div className="text-lg md:text-xl lg:pl-6 mb-10 text-gray-600 h-20">
                 <TypeAnimation
                   sequence={[
                     'Transforming patient care with cutting-edge artificial intelligence',
@@ -190,7 +190,7 @@ export default function Component() {
                 />
               </div>
               <Button 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg font-semibold transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white ml-6 px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg font-semibold transition-colors"
                 onClick={() => setShowModal(true)}
               >
                 Discover Med-Prognosis
