@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, AnimatePresence } from "framer-motion"
@@ -8,7 +8,8 @@ import Image from "next/image"
 import { TypeAnimation } from 'react-type-animation'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei'
-import heroimg from "../../public/images/1.png"
+import heroimg from "../../public/images/1.svg"
+import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai'
 
 function AnimatedSphere() {
   const meshRef = useRef()
@@ -41,6 +42,7 @@ export default function Component() {
   const [activeFeature, setActiveFeature] = useState(null)
   const { scrollY } = useScroll()
   const [showModal, setShowModal] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     return scrollY.onChange(() => setIsSticky(scrollY.get() > 100))
@@ -52,6 +54,10 @@ export default function Component() {
     transition: { duration: 0.6 }
   }
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   const stagger = {
     animate: {
       transition: {
@@ -59,6 +65,8 @@ export default function Component() {
       }
     }
   }
+
+  const navItems = ["Home", "About", "Services", "Testimonials", "Contact"]
 
   const testimonials = [
     { name: "Dr. Emily Chen", role: "Cardiologist", text: "AI-Med has revolutionized how I diagnose and treat heart conditions. The accuracy is remarkable." },
@@ -82,7 +90,6 @@ export default function Component() {
           <AnimatedSphere />
           <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
         </Canvas>
-
       </div>
       <div className="relative z-10">
         <motion.header 
@@ -91,43 +98,81 @@ export default function Component() {
           animate={{ y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <nav className="container mx-auto px-4 flex justify-between items-center">
-            <motion.div 
-              className="text-2xl font-bold text-blue-600 flex items-center"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5,  }}
+          <div className="container mx-auto px-4 md:px-6 lg:px-8 xl:px-12">
+            <nav className="flex justify-between items-center">
+              <motion.div 
+                className="text-2xl font-bold text-blue-600 flex items-center"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Zap className="w-8 h-8 mr-2" />
+                Med-Prognosis
+              </motion.div>
+              <div className="hidden md:flex space-x-6">
+                {navItems.map((item) => (
+                  <motion.a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="hover:text-blue-600 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item}
+                  </motion.a>
+                ))}
+              </div>
+              <div className="md:hidden">
+                <button
+                  className="flex items-center justify-center w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full"
+                  onClick={toggleMobileMenu}
+                >
+                  {isMobileMenuOpen ? (
+                    <AiOutlineClose className="text-lg" />
+                  ) : (
+                    <AiOutlineMenu className="text-lg" />
+                  )}
+                </button>
+              </div>
+            </nav>
+          </div>
+          {isMobileMenuOpen && (
+            <motion.div
+              className="md:hidden fixed top-16 left-0 w-full bg-white bg-opacity-90 backdrop-blur-md shadow-md z-40"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <Zap className="w-8 h-8 mr-2" />
-              Med-Prognosis
+              <ul className="flex flex-col space-y-4 p-4">
+                {navItems.map((item) => (
+                  <motion.li key={item} whileTap={{ scale: 0.95 }}>
+                    <a
+                      href={`#${item.toLowerCase()}`}
+                      className="block py-2 px-4 hover:bg-blue-100 hover:text-blue-600 rounded transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
             </motion.div>
-            <motion.ul 
-              className="flex space-x-6"
-              variants={stagger}
-              initial="initial"
-              animate="animate"
-            >
-              {["Home", "About", "Services", "Testimonials", "Contact"].map((item) => (
-                <motion.li key={item} variants={fadeIn}>
-                  <a href={`#${item.toLowerCase()}`} className="hover:text-blue-600 transition-colors">{item}</a>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </nav>
+          )}
         </motion.header>
 
         <main className="container mx-auto px-4 pt-20">
           <section id="home" className="py-20 flex flex-col md:flex-row items-center justify-between">
             <motion.div 
-              className="md:w-1/2 mb-10 md:mb-0"
+              className="w-full md:w-1/2 mb-10 md:mb-0"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-5xl font-bold mb-6 text-gray-800">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
                 AI-Powered <span className="text-blue-600">Healthcare</span> Revolution
               </h1>
-              <div className="text-xl mb-10 text-gray-600 h-20">
+              <div className="text-lg md:text-xl mb-10 text-gray-600 h-20">
                 <TypeAnimation
                   sequence={[
                     'Transforming patient care with cutting-edge artificial intelligence',
@@ -145,21 +190,21 @@ export default function Component() {
                 />
               </div>
               <Button 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg font-semibold transition-colors"
                 onClick={() => setShowModal(true)}
               >
                 Discover Med-Prognosis
               </Button>
             </motion.div>
             <motion.div 
-              className="md:w-1/2 relative"
+              className="w-full md:w-1/2 relative"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="relative w-full h-96">
+              <div className="relative w-full h-64 md:h-96">
                 <Image 
-                  src= {heroimg}
+                  src={heroimg}
                   alt="AI in Healthcare" 
                   layout="fill"
                   objectFit="contain"
@@ -226,13 +271,13 @@ export default function Component() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="flex items-center mb-4">
-                  <Image
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzs6emdJNNWXDCt1OPZR8SZKn-o_vgnvlCQ&s"
-                    alt={testimonial.name}
-                    width={60}
-                    height={60}
-                    className="rounded-full mr-4"
-                  />
+                    <Image
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzs6emdJNNWXDCt1OPZR8SZKn-o_vgnvlCQ&s"
+                      alt={testimonial.name}
+                      width={60}
+                      height={60}
+                      className="rounded-full mr-4"
+                    />
                     <div>
                       <h3 className="text-lg font-semibold">{testimonial.name}</h3>
                       <p className="text-gray-600">{testimonial.role}</p>
